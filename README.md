@@ -83,7 +83,9 @@ Uses InvShiftedCoupledOscillator along each physical dimension. This is for the 
 Linear Operator that stores the sparse matrix. 
 
 **Preconditioned Davidson Algorithm**
+
 The Preconditioner is given by DavidsonPreconditioner() class.
-davodson algorithm is implemented with preconditioner. Adapted from https://joshuagoings.com/2013/08/23/davidsons-method/. Acknowledge to Joshua Goings.
+
+Davidson algorithm is implemented with preconditioner. Adapted from https://joshuagoings.com/2013/08/23/davidsons-method/. Acknowledge to Joshua Goings.
 
 
