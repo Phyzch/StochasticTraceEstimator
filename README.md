@@ -5,9 +5,10 @@ We can then obtain the fluctuation factor from the log determinant.
 Author: Chenghao Zhang.
 
 **How to Use**
+
 Change the folder path to a given folder and it will uses the hessian info in pickle file format to compute the trace estimate.
 
-Options:
+**Options**
 - trace estimate on original hessian matrix (large variance)
 - trace estimate with control variate (small variance)
 - trace estimate with control variate + subspace projection (tiny variance)
