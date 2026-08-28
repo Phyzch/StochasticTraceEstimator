@@ -8,6 +8,12 @@ Author: Chenghao Zhang.
 
 Change the folder path to a given folder and it will uses the hessian info in pickle file format to compute the trace estimate.
 
+**Requirements**
+See requirements.txt. 
+pip install -r requirements.txt
+
+requires: (1) numpy  (2) scipy (3) linear_operator (4) torch
+
 **Options**
 - trace estimate on original hessian matrix (large variance)
 - trace estimate with control variate (small variance)

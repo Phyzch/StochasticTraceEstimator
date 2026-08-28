@@ -13,9 +13,9 @@ import copy
 import pickle 
 from contextlib import contextmanager
 import scipy.sparse.linalg as sl
+import warnings
 try:
     import linear_operator
-
 except ImportError:
     print("linear_operator is not found. Install it.")
     subprocess.check_all([
@@ -1422,7 +1422,7 @@ def compute_hessian_logdet(bead_hessian: np.ndarray,
     return hess_logdet
 
 if __name__ == "__main__":
-    folder_path = "./dinitro-HBQ/T=137/N=80"
+    folder_path = "./malonaldehyde/T=275/N=20"
     file_name = "hess.pkl"
     file_path = os.path.join(folder_path, file_name)
     with open(file_path, "rb") as f:
@@ -1443,7 +1443,8 @@ if __name__ == "__main__":
     subspace_proj= False
     # projection index for low frequency modes when doing subspace projection.
     proj_index= 8
-    
+
+    warnings.filterwarnings("ignore")
     hess_logdet = compute_hessian_logdet(*hess_args,
                                          random_vector_number= random_vector_number,
                                          max_tridiag_iter= max_tridiag_iter,
