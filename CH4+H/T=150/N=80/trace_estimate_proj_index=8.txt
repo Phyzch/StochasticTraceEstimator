@@ -1,0 +1,32 @@
+
+We are ready to start. Reading RESTART ... (This can take a while)
+Use the energy shift (reactant energy) with the provided values from terminal (unit eV)
+
+Temperature: 150.0 K
+NBEADS: 160
+atoms:  6
+ASR:    poly
+1/(betaP*hbar) =  0.07600
+random vector number for trace estimation 100
+found lowest eigenvalues in each iteration:
+[0.011174495833181964, 2.5764489301744168e-05, 2.0333255024314824e-05, 4.473846948117577e-06, 3.0493146971334784e-06, 2.432623123733918e-06, -2.9632512253380635e-07, -8.305951745103736e-06, -1.0404933890096264e-05, -1.0866375974126925e-05, -1.093842691165826e-05, -1.0950598120701307e-05, -1.0951549468091209e-05]
+Davidson info: matrix dimension 2880, subspace dim that reach the convergence: 104, relative error tolerance 0.05, absolute error tolerance 1e-08
+negative eigenvalue solved: -725.8076909158164 cm^-1
+solving negative and zero eigenpairs took 0.0048 min (0.29 s)
+use spring term as control variate to estimate logdet.
+The projection index to project out the subspace is 8
+total number of probe vector used: 244
+std from 20 samples for logdet: 0.4340910942771974.
+logdet of pd matrix: -14615.315637741836
+total time for trace estimate: took 0.1312 min (7.87 s)
+logdet for the hessian matrix (after reverting the shift) is -14558.06675011076
+log determinant obtained using the trace estimator: -14558.06675011076, time 0.14139718541666665 min.
+instanton path is printed to file: instanton_path.xyz
+
+We are done. Instanton rate. Nbeads 160 (diff only 80.0)
+V0  1e-05 eV ( 0.00023045128079645928 Kcal/mol) 
+   BN       (BN*N)    | Qt(bohr^-3) | Qrot        | log(Qvib*N) | S/hbar   ( S1/hbar ,S2/hbar  ) |
+ 221.778 ( 35484.532 ) |       3.602 |     556.711 |     -89.090 |   41.513 (   33.085    8.428 ) |
+
+
+

@@ -279,7 +279,7 @@ class TraceEstimator(BaseTraceEstimator):
         Compute the log determinant of a positive definite matrix using linear operator.
         :param: random_vector_number: number of random vectors used to estimate the trace.
         :param: max_tridiag_iter: the maximum size of tridiagonalization matrix. 
-        :param: cg_tolerance: the tolerance for the batched conjugate gradient solver, this is used to compute Lanczos tridiagonalization matrix.
+        :param: `cg_tolerance: the tolerance for the batched conjugate gradient solver, this is used to compute Lanczos tridiagonalization matrix.
         See https://arxiv.org/abs/1809.11165
         """
         with (linear_operator.settings.num_trace_samples(random_vector_number),
@@ -1422,7 +1422,7 @@ def compute_hessian_logdet(bead_hessian: np.ndarray,
     return hess_logdet
 
 if __name__ == "__main__":
-    folder_path = "./malonaldehyde/T=275/N=20"
+    folder_path = "./malonaldehyde/T=110/N=160"
     file_name = "hess.pkl"
     file_path = os.path.join(folder_path, file_name)
     with open(file_path, "rb") as f:
@@ -1440,9 +1440,9 @@ if __name__ == "__main__":
     # whether to use control variate. Currently only spirng term as control variate is used.
     control_varaite= True
     # whether to do subspace projection
-    subspace_proj= False
+    subspace_proj= True
     # projection index for low frequency modes when doing subspace projection.
-    proj_index= 8
+    proj_index= 15
 
     warnings.filterwarnings("ignore")
     hess_logdet = compute_hessian_logdet(*hess_args,
