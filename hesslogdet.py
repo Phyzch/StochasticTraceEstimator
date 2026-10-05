@@ -1053,8 +1053,7 @@ def solve_negative_and_zero_eigenpairs_davidson(hessian_operator, spring_term_pa
     phys_dim = natoms * 3 
     spring_eigval_scale_factor = omega2 
     precond_scaling_factor = 100.0
-    # #TODO: for debug.
-    # precond_scaling_factor = 1000000
+
     precond = DavidsonPreconditioner(nbeads, phys_dim, shifted_hessian_operator, 
                                      spring_scale_factor= spring_eigval_scale_factor,
                                      precond_scaling_factor= precond_scaling_factor)
@@ -1064,48 +1063,9 @@ def solve_negative_and_zero_eigenpairs_davidson(hessian_operator, spring_term_pa
     d, v = davidson(shifted_hessian_operator, precond, rtol, atol)
     d_freq = np.sign(d[0]) * np.sqrt(np.abs(d[0])) / factor
     print(f"negative eigenvalue solved: {d_freq} cm^{-1}")
-    # # lobpcg method:
-    # hessian = hessian_operator.to_dense()
-    # d, v = torch.lobpcg(hessian,k=1, largest= False)
 
-    # lanczos method:
     d = np.concatenate([d, np.array([0] * (trans_rot_zero_mode_number + instanton_zero_mode_number))], axis= 0)
     v = np.concatenate([v, instanton_zero_mode[:, np.newaxis], trans_rot_vec.T], axis= 1)
-
-    # shift_values for eigenvalues
-    shift = positive_eigval - d
-
-    return d, v, shift  
-
-def solve_negative_and_zero_eigenpairs(hessian_operator, trans_rot_vec, zero_mode):
-    """
-    solve the negative and zero eigenpairs of ring polymer hessian matrix.
-    There will be 1 negative eigenmode, 1 zero eigenmode, and 6 extra zero modes corresponding to translation and rotation.
-    proj_vec: shape: [6, ndim]
-    Scaling is O(N^3) with scipy.linalg.eigh. 
-    """
-    negative_mode_number = 1
-    instanton_zero_mode_number = 1 
-    trans_rot_zero_mode_number = 6
-
-    # translation and rotation mode is known.  
-    # shift these modes beforehand. 
-    hessian = hessian_operator.to_dense()
-
-    # shift the zero modes.
-    shifted_hessian = hessian + positive_eigval * trans_rot_vec.T @ trans_rot_vec 
-
-    # with timer("scipy"):
-    #     d, v = scipy.linalg.eigh(shifted_hessian, subset_by_index=[0, 0])
-
-    # d = np.concatenate([d, np.array([0] * (trans_rot_zero_mode_number + instanton_zero_mode_number))], axis= 0)
-    # v = np.concatenate([v, zero_mode[:, np.newaxis], trans_rot_vec.T], axis= 1)
-
-    with timer("scipy"):
-        d, v = scipy.linalg.eigh(shifted_hessian, subset_by_index=[0, 1])
-
-    d = np.concatenate([d, np.array([0] * trans_rot_zero_mode_number )], axis= 0)
-    v = np.concatenate([v, trans_rot_vec.T], axis= 1)
 
     # shift_values for eigenvalues
     shift = positive_eigval - d
@@ -1304,46 +1264,6 @@ def estimate_logdet(trace_estimator: BaseTraceEstimator,
 
     return logdet
 
-def test_solve_scaling(operator, max_tridiag_iter, cg_tolerance, operator_name= "operator"):
-    vector_num = 100
-    torch.manual_seed(42)
-    with timer(f"test matmul scaling with {vector_num} random vectors for {operator_name}"):
-        with (linear_operator.settings.max_lanczos_quadrature_iterations(max_tridiag_iter),
-               linear_operator.settings.max_cg_iterations(max_tridiag_iter),
-              linear_operator.settings.cg_tolerance(cg_tolerance),
-              linear_operator.settings.num_trace_samples(vector_num)):
-            size = operator.size()[1]
-            x = torch.rand(size, vector_num)
-            _, t_mat = operator._solve(x, None, num_tridiag= vector_num)
-            # logdet = operator.logdet().item()
-
-            pass
-
-def test_matmul_scaling(operator, operator_name= "operator"):
-    vector_num = 100
-    torch.manual_seed(42)
-    with timer(f"test matmul scaling with {vector_num} random vectors for {operator_name}"):
-            size = operator.size()[1]
-            for _ in range(vector_num):
-                x = torch.rand(size, dtype= operator.dtype)
-                y = operator.matmul(x)
-
-            pass
-
-def test_two_operator_matmul(operator1, operator2):
-    """
-    test the matmul of two operators.
-    """
-    assert operator1.size() == operator2.size(), "The two operators must have the same size."
-
-    size = operator1.size()[1]
-    torch.manual_seed(42)
-    x = torch.rand(size)
-    y1 = operator1.matmul(x) 
-    y2 = operator2.matmul(x)
-    diff = y1 - y2 
-    print("relative error: \n")
-    print(torch.sum(torch.abs(diff)) / torch.sum(torch.abs(y1)))
 
 def compute_hessian_logdet(bead_hessian: np.ndarray,
                            spring_term_param: tuple,
